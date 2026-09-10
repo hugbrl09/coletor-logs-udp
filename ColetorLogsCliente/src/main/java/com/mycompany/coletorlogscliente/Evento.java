@@ -1,13 +1,40 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.coletorlogscliente;
 
-/**
- *
- * @author 07872123185
- */
 public class Evento {
-    
+    private String nivel;       // INFO, WARN ou ERROR
+    private String origem;      // Ex: checkout-api
+    private String mensagem;    // Ex: Pedido iniciado
+
+    public Evento() {
+    }
+
+    public Evento(String nivel, String origem, String mensagem) {
+        this.nivel = nivel;
+        this.origem = origem;
+        this.mensagem = mensagem;
+    }
+
+    public String getNivel() {
+        return nivel;
+    }
+
+    public String getOrigem() {
+        return origem;
+    }
+
+    public String getMensagem() {
+        return mensagem;
+    }
+
+    public void setNivel(String nivel) {
+        this.nivel = nivel;
+    }
+
+    public void setOrigem(String origem) {
+        this.origem = origem;
+    }
+
+    public void setMensagem(String mensagem) {
+        this.mensagem = mensagem;
+    }
 }
