@@ -1,9 +1,8 @@
 # 📋 Coletor de Logs Centralizado com Sockets UDP
 
 ![Java](https://img.shields.io/badge/Java-17%2B-orange?style=for-the-badge&logo=openjdk)
-![Maven](https://img.shields.io/badge/Maven-3.8%2B-C71A36?style=for-the-badge&logo=apachemaven)
+![NetBeans](https://img.shields.io/badge/NetBeans-IDE-1B6AC6?style=for-the-badge&logo=apachenetbeans)
 ![UDP](https://img.shields.io/badge/Protocolo-UDP-blue?style=for-the-badge)
-![License](https://img.shields.io/badge/Licen%C3%A7a-MIT-green?style=for-the-badge)
 
 Projeto desenvolvido para a disciplina de **Sistemas Paralelos e Distribuídos**. Aplicação cliente/servidor concorrente em Java utilizando **Sockets UDP**, **Threads (ExecutorService)**, **Exclusão Mútua (`synchronized`)** e **Interface Gráfica em Swing** com atualização assíncrona (`SwingWorker`).
 
@@ -22,7 +21,7 @@ O **Coletor de Logs Centralizado** permite que múltiplas aplicações clientes 
 
 ## ⚙️ Arquitetura do Protocolo JSON
 
-A comunicação entre Cliente e Servidor ocorre via pacotes UDP utilizando a biblioteca **Gson** para serialização/desserialização dos objetos em JSON:
+A comunicação entre Cliente e Servidor ocorre via pacotes UDP utilizando a biblioteca **Gson** para serialização e desserialização dos objetos em JSON:
 
 ### ✉️ `Requisicao.java`
 * **`operacao`**: `"REGISTRAR"` ou `"LISTAR"`.
@@ -60,50 +59,58 @@ A comunicação entre Cliente e Servidor ocorre via pacotes UDP utilizando a bib
 
 ---
 
-## 🚀 Como Executar
-
-### Pré-requisitos
-* **Java JDK 17** ou superior instalado.
-* **Apache Maven** instalado.
+## 🚀 Como Executar no NetBeans IDE
 
 ### 1. Clonar o Repositório
+
+Abra o terminal e baixe o projeto: 
 ```bash
 git clone https://github.com/hugbrl09/coletor-logs-udp.git
 cd coletor-logs-udp
 ```
 
-### 2. Iniciar o Servidor
-Navegue até a pasta do servidor e execute via Maven:
-```bash
-cd ColetorLogsServidor
-mvn clean compile exec:java
-```
-O servidor estará ativo e escutando na porta **`9999/UDP`**.
+### 2. Abrir os Projetos
+1. Abra o **NetBeans IDE**.
+2. Vá em **File > Open Project...** (ou `Ctrl + Shift + O`).
+3. Selecione as duas pastas: `ColetorLogsServidor` e `ColetorLogsCliente`.
 
-### 3. Iniciar o Cliente (Interface Gráfica)
-Em um novo terminal, navegue até a pasta do cliente e execute:
-```bash
-cd ColetorLogsCliente
-mvn clean compile exec:java
-```
+---
+
+### 3. Iniciar o Servidor
+1. Na aba **Projects** à esquerda, expanda o projeto **`ColetorLogsServidor`**.
+2. Navegue até o pacote `com.mycompany.coletorlogsservidor`.
+3. Clique com o botão direito no arquivo **`ServidorApp.java`** e selecione **Run File** (ou pressione `Shift + F6`).
+4. Verifique na aba de saída (*Output*) do NetBeans a mensagem:
+   > `Servidor Coletor de Logs UDP ativo na porta 9999`
+
+---
+
+### 4. Iniciar o Cliente (Interface Gráfica)
+1. Expanda o projeto **`ColetorLogsCliente`**.
+2. Navegue até o pacote `com.mycompany.coletorlogscliente`.
+3. Clique com o botão direito no arquivo **`TelaCliente.java`** e selecione **Run File** (ou pressione `Shift + F6`).
+4. A janela da interface gráfica do cliente será exibida.
 
 ---
 
 ## 🧪 Testando a Concorrência (Intercalação de Logs)
 
-1. Abra **duas ou três instâncias** simultâneas do projeto `ColetorLogsCliente`.
-2. No **Cliente 1**, adicione 3 eventos à fila local (ex: `A1`, `A2`, `A3`).
-3. No **Cliente 2**, adicione 3 eventos à fila local (ex: `B1`, `B2`, `B3`).
+Para validar a concorrência e o uso de threads na Região Crítica do servidor:
+
+1. Abra **duas janelas do cliente**: no NetBeans, clique com o botão direito em **`TelaCliente.java`** e selecione **Run File** duas vezes consecutivas.
+2. Na **Janela 1 do Cliente**, adicione 3 eventos à fila local (ex: `Origem: API-A` com mensagens `A1`, `A2`, `A3`).
+3. Na **Janela 2 do Cliente**, adicione 3 eventos à fila local (ex: `Origem: API-B` com mensagens `B1`, `B2`, `B3`).
 4. Clique no botão **"Enviar Fila ao Servidor"** em ambos os clientes quase ao mesmo tempo.
 5. No painel de consulta de qualquer cliente, selecione o filtro `"TODOS"` e clique em **"Consultar Servidor"**.
-6. **Resultado Esperado:** Como cada thread do servidor processa a lista aguardando 1 segundo por evento, os logs de `A` e `B` aparecerão **intercalados no histórico central** (ex: `A1`, `B1`, `A2`, `B2...`), demonstrando o processamento paralelo seguro na Região Crítica!
+6. **Resultado Esperado:** Como cada thread do servidor processa um evento por segundo, os logs das duas janelas aparecerão **intercalados no histórico central** (ex: `A1`, `B1`, `A2`, `B2...`), comprovando o atendimento concorrente no servidor!
 
 ---
 
 ## 🛠️ Tecnologias Utilizadas
 
 * **Linguagem:** Java 17
+* **IDE:** NetBeans IDE
 * **Redes:** `java.net.DatagramSocket`, `DatagramPacket`
 * **Concorrência:** `java.util.concurrent.ExecutorService`, `SwingWorker`, `synchronized`
 * **Interface:** Java Swing (GUI)
-* **Serialização:** Google Gson 2.10.1
+* **Serialização:** Google Gson
